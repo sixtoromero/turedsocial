@@ -4,6 +4,7 @@ import { AuthService } from "../../services/auth.service";
 import { UsersService } from "../../services/users.service";
 import { UsersModel } from 'src/app/models/users.model';
 import { Router } from '@angular/router';
+import { NgxUiLoaderService } from 'ngx-ui-loader';
 
 @Component({
   selector: 'app-login',
@@ -34,7 +35,11 @@ export class LoginComponent implements OnInit {
   get status() { return this.registerForm.get('status'); }
   get passwordreg() { return this.registerForm.get('passwordreg'); }
   
-  constructor(private authService: AuthService, private usersService: UsersService, private router: Router) { }
+  constructor(
+      private authService: AuthService, 
+      private usersService: UsersService, 
+      private router: Router,
+      private ngxService: NgxUiLoaderService) { }
 
   createLoginForm() {
     return new FormGroup({
@@ -63,14 +68,20 @@ export class LoginComponent implements OnInit {
   }
 
   login() {
+    this.ngxService.start();    
     this.authService.login(this.iUser).subscribe(response => {
+      this.ngxService.stop();
       if (response.IsSuccess) {
         this.router.navigate(['/']);
       }
     });
+    
   }
 
   register() {
+    
+    this.ngxService.start();
+
     this.usersService.registergorest(this.iUserReg).subscribe(response => {
       if (response['_meta'].code === 200) {
 
@@ -82,7 +93,11 @@ export class LoginComponent implements OnInit {
         });
         
       }
+
+      this.ngxService.stop();
     });
+
+    
   }
 
 }

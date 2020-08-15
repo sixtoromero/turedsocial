@@ -23,7 +23,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { PanelModule } from 'primeng/panel';
 import { ButtonModule } from 'primeng/button';
 import { EditorModule } from 'primeng/editor';
-
+import { VirtualScrollerModule } from 'primeng/virtualscroller'
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -31,6 +31,8 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 
 import { JwtInterceptor } from "../app/security/jwt.interceptor";
 import { HomeComponent } from './pages/home/home.component';
+
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 
 @NgModule({
@@ -61,7 +63,9 @@ import { HomeComponent } from './pages/home/home.component';
     InputTextModule,
     PanelModule,
     ButtonModule,
-    EditorModule
+    EditorModule,
+    VirtualScrollerModule,
+    NgxUiLoaderModule
   ],
   providers: [
     {

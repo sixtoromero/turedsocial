@@ -32,8 +32,23 @@
             ¿Que estás pensando?
           </div>
           <div class="card-body">
-            
-            <p-editor [(ngModel)]="ipost.body" [style]="{'height':'320px'}"></p-editor>
+            <div class="row">
+              <div class="col-md-12">
+                <div class="form-group">
+                  <label>Título</label>
+                  <input 
+                      type="password" 
+                      class="form-control" 
+                      [(ngModel)]="ipost.title"
+                      placeholder="Ingrese un título">
+                </div>
+              </div>
+              <div class="col-md-12">
+                <div class="form-group">
+                  <p-editor [(ngModel)]="ipost.body" [style]="{'height':'320px'}"></p-editor>
+                </div>
+              </div>
+            </div>
 
             <!-- <p-editor [(ngModel)]="ipost.body" [style]="{'height':'320px'}">
               <p-header>
@@ -43,7 +58,7 @@
                       <button class="ql-underline" aria-label="Underline"></button>
                   </span>
               </p-header>
-            </p-editor> -->            
+            </p-editor> -->
             <br>
             <div class="row">
               <div class="col-md-12" style="text-align: right;">
@@ -57,7 +72,34 @@
     <br>
     <div class="row">
       <div class="col-md-12">
-        
+        <p-virtualScroller [value]="virtualCars" scrollHeight="450px" [itemSize]="100" [rows]="100" 
+                [lazy]="true" (onLazyLoad)="loadCarsLazy($event)">
+            <ng-template let-car pTemplate="item" let-i="index">
+                <div class="car-details">
+                    <div>
+                        <div>
+                            <b>{{car.vin}}</b>
+                            <div>{{car.year}} - {{car.color}}</div> 
+                        </div>
+                    </div>
+                    <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)"></button>
+                </div>
+            </ng-template>
+            <ng-template let-car pTemplate="loadingItem">
+                <div class="car-details">
+                    <div>
+                        <div class="car-item-image empty-car-item-image"></div>
+                        <div>
+                            <b class="empty-car-item-text"></b>
+                            <div class="empty-car-item-text"></div> 
+                        </div>
+                    </div>
+                    <div class="empty-car-item-button"></div>
+                </div>
+            </ng-template>
+        </p-virtualScroller>
       </div>
     </div>
 </div>
+
+<ngx-ui-loader></ngx-ui-loader>
