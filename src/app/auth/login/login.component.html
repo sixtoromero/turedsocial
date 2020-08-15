@@ -1,0 +1,152 @@
+<form [formGroup]="loginForm" #loginfrm="ngForm" >
+    <div class="container">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <h1 class="display-4">Red Social</h1>
+              <p class="lead">Te ayuda a comunicarte y compartir con las personas que forman parte de tu vida.</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        Entra y comparte
+                    </div>
+                    <div class="card-body">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Correo electrónico</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control" 
+                                    formControlName="email"
+                                    [(ngModel)]="iUser.email"
+                                    [ngClass]="{ 'is-invalid': email.invalid && (email.dirty || email.touched) }"
+                                    placeholder="Ingrese su correo electrónico">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label>Constraseña</label>
+                                <input 
+                                    type="password" 
+                                    class="form-control" 
+                                    formControlName="password" 
+                                    [ngClass]="{ 'is-invalid': password.invalid && (password.dirty || password.touched) }"
+                                    [(ngModel)]="iUser.password"
+                                    placeholder="Ingrese su contraseña">
+                            </div>
+                        </div>                  
+                    </div>
+                    <div class="card-footer text-muted" style="text-align: center;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <!-- <button type="button" class="btn btn-primary btn-lg btn-block">Iniciar sesión</button> -->
+                                <button 
+                                    type="button" 
+                                    pButton 
+                                    (click)="login();" 
+                                    style="width: 100%;" 
+                                    label="Iniciar sesión" 
+                                    class="ui-button-success"
+                                    [disabled]="!loginForm.valid"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12" style="text-align: center;">
+                <a style="color: blue; cursor: pointer;" (click)="modalRegister = true;">Quiero registrarme</a>
+            </div>
+        </div>
+    </div>
+</form>
+
+<p-dialog header="Registro de usuario" [(visible)]="modalRegister" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+    <form [formGroup]="registerForm">
+        <input type="text" formControlName="id"style="display: none;">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Nombres</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        formControlName="first_name" 
+                        [(ngModel)]="iUserReg.first_name"
+                        [ngClass]="{ 'is-invalid': first_name.invalid && (first_name.dirty || first_name.touched) }"
+                        placeholder="Ingrese nombres">
+                    </div> 
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Apellidos</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        formControlName="last_name" 
+                        [(ngModel)]="iUserReg.last_name"
+                        [ngClass]="{ 'is-invalid': last_name.invalid && (last_name.dirty || last_name.touched) }"
+                        placeholder="Ingrese nombres">
+                </div> 
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Genero</label>
+                    <select 
+                        class="form-control" 
+                        formControlName="gender" 
+                        [ngClass]="{ 'is-invalid': gender.invalid && (gender.dirty || gender.touched) }"
+                        [(ngModel)]="iUserReg.gender">
+                        <option value="female">Femenino</option>
+                        <option value="male">Masculino</option>
+                    </select>
+                </div> 
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Correo electrónico</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        formControlName="correo" 
+                        [ngClass]="{ 'is-invalid': correo.invalid && (correo.dirty || correo.touched) }"
+                        [(ngModel)]="iUserReg.email"
+                        placeholder="Ingrese correo">
+                </div> 
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Contraseña</label>
+                    <input 
+                        type="password" 
+                        class="form-control" 
+                        formControlName="passwordreg" 
+                        [ngClass]="{ 'is-invalid': passwordreg.invalid && (password.dirty || passwordreg.touched) }"
+                        [(ngModel)]="iUserReg.password"
+                        placeholder="Ingrese contraseña">
+                </div> 
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select 
+                        class="form-control" 
+                        formControlName="status" 
+                        [ngClass]="{ 'is-invalid': status.invalid && (status.dirty || status.touched) }"
+                        [(ngModel)]="iUserReg.status">
+                        <option value="active">Activo</option>
+                        <option value="inactive">Inactivo</option>
+                    </select>
+                </div> 
+            </div>
+        </div>
+    </form>
+    
+    <p-footer>
+        <button pButton type="button" (click)="modalRegister=false" label="Cancelar" class="p-button-outlined"></button>
+        <button type="button" pButton (click)="register();" label="Registrarme" class="ui-button-success" [disabled]="!registerForm.valid"></button>
+    </p-footer>
+</p-dialog>
