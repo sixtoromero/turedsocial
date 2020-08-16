@@ -8,6 +8,7 @@ import { PostsService } from "../../services/posts.service";
 
 import {LazyLoadEvent, SelectItem} from 'primeng/api';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -17,6 +18,8 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 })
 export class HomeComponent implements OnInit {
 
+  
+  public registerForm: FormGroup;
   ipost = new PostsModel();
 
   cars: Car[];
@@ -27,6 +30,9 @@ export class HomeComponent implements OnInit {
   sortKey: string;
 
   sortOptions: SelectItem[];
+
+  get title() { return this.registerForm.get('title'); }
+  get body() { return this.registerForm.get('body'); }  
 
   constructor(
     private carService: CarService,
@@ -42,25 +48,62 @@ export class HomeComponent implements OnInit {
         {label: 'Oldest First', value: 'year'}
     ];
 
+    this.registerForm = this.createRegisterForm();
+
     this.getposts();
   }
 
   getposts() {
     this.ngxService.start();
-    this.postsService.getposts().subscribe(response => {
+    this.postsService.getpostsByUserID().subscribe(response => {
       
       if (response['_meta'].code === 200){        
         //console.log('resultado', response['result']);
         this.liPosts = response['result'];
-        console.log('resultado', this.liPosts);
+        //console.log('resultado', this.liPosts);
+        this.postsService.getposts().subscribe(reg => {
+          if (reg['_meta'].code === 200) {
+            reg['result'].forEach(item => {
+              this.liPosts.push(item);
+            });
+          }
+        });
       }
 
+      console.log('RESULTADO ALL', this.liPosts);
       this.ngxService.stop();
       //   console.log(response['result']);
       // }
     });
     
   }
+
+  register() {
+    
+    this.ngxService.start();
+    
+    this.ipost.user_id = localStorage.getItem('user_id');
+
+    this.postsService.register(this.ipost).subscribe(response => {
+      if (response['_meta'].code === 200) {
+        console.log('EURECA', response);
+        this.registerForm.reset();
+      } else {
+        console.log('CARE NEA OME NEA', response);
+      }
+
+      this.ngxService.stop();
+    });
+    
+  }
+
+  createRegisterForm() {
+    return new FormGroup({
+      title: new FormControl('', [Validators.required]),
+      body: new FormControl('', [Validators.required])
+    });
+  }
+
 
   loadCarsLazy(event: LazyLoadEvent) {       
     //simulate remote connection with a timeout 

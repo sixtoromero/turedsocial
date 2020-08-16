@@ -28,9 +28,18 @@ export class PostsService {
 
     constructor(private _http: HttpClient) { }
 
+    getpostsByUserID(): Observable<PostsModel> {
+        const user_id = localStorage.getItem('user_id');
+        return this._http.get<PostsModel>(`${this.endPointgorest}/posts?access-token=${environment.token}&user_id=${user_id}`);
+    }
+
     getposts(): Observable<PostsModel> {
+        const user_id = localStorage.getItem('user_id');
         return this._http.get<PostsModel>(`${this.endPointgorest}/posts?access-token=${environment.token}`);
     }
 
+    register(post: PostsModel): Observable<PostsModel> {
+        return this._http.post<PostsModel>(`${this.endPointgorest}/posts?access-token=${environment.token}`, post, httpOptionsgorest);
+    }
 
 }

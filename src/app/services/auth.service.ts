@@ -49,6 +49,7 @@ export class AuthService {
                 if (res.IsSuccess === true){
                     const user: UsersModel = res.Data;
                     localStorage.setItem('usuario', JSON.stringify(user));
+                    localStorage.setItem('user_id', user.user_id);
                     this.usuarioSubject.next(user);
                 }
                 return res;
@@ -63,6 +64,7 @@ export class AuthService {
 
     logout() {
         localStorage.removeItem('usuario');
+        localStorage.removeItem('user_id');
         this.usuarioSubject.next(null);
     }    
 

@@ -1,4 +1,5 @@
-<div class="container">
+<form [formGroup]="registerForm">
+  <div class="container">
     <div class="row">
       <div class="col-md-12">
             <nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -37,15 +38,22 @@
                 <div class="form-group">
                   <label>Título</label>
                   <input 
-                      type="password" 
+                      type="text" 
                       class="form-control" 
+                      formControlName="title" 
+                      [ngClass]="{ 'is-invalid': title.invalid && (title.dirty || title.touched) }"
                       [(ngModel)]="ipost.title"
                       placeholder="Ingrese un título">
                 </div>
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <p-editor [(ngModel)]="ipost.body" [style]="{'height':'320px'}"></p-editor>
+                  <p-editor 
+                    [(ngModel)]="ipost.body" 
+                    [style]="{'height':'320px'}"
+                    formControlName="body"
+                    [ngClass]="{ 'is-invalid': body.invalid && (body.dirty || body.touched) }">
+                  </p-editor>
                 </div>
               </div>
             </div>
@@ -62,7 +70,14 @@
             <br>
             <div class="row">
               <div class="col-md-12" style="text-align: right;">
-                <button pButton pRipple type="button" label="Publicar" class="p-button-rounded p-button-info"></button>
+                <button 
+                  pButton 
+                  pRipple 
+                  type="button" 
+                  label="Publicar" 
+                  (click)="register();" 
+                  class="p-button-rounded p-button-info" 
+                  [disabled]="!registerForm.valid"></button>
               </div>
             </div>
           </div>
@@ -100,6 +115,8 @@
         </p-virtualScroller>
       </div>
     </div>
-</div>
+  </div>
+</form>
+
 
 <ngx-ui-loader></ngx-ui-loader>

@@ -85,6 +85,8 @@ export class LoginComponent implements OnInit {
     this.usersService.registergorest(this.iUserReg).subscribe(response => {
       if (response['_meta'].code === 200) {
 
+        console.log(response);
+        
         this.iUserReg.user_id = response['result'].id;
 
         this.usersService.register(this.iUserReg).subscribe(result => {
