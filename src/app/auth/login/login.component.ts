@@ -5,11 +5,14 @@ import { UsersService } from "../../services/users.service";
 import { UsersModel } from 'src/app/models/users.model';
 import { Router } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
+import { MessageService } from 'primeng/api';
+
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
+  providers: [MessageService]
 })
 export class LoginComponent implements OnInit {
 
@@ -28,8 +31,7 @@ export class LoginComponent implements OnInit {
   get password() { return this.loginForm.get('password'); }
 
   //Register Form
-  get first_name() { return this.registerForm.get('first_name'); }
-  get last_name() { return this.registerForm.get('last_name'); }  
+  get name() { return this.registerForm.get('name'); }
   get gender() { return this.registerForm.get('gender'); }
   get correo() { return this.registerForm.get('correo'); }
   get status() { return this.registerForm.get('status'); }
@@ -39,6 +41,7 @@ export class LoginComponent implements OnInit {
       private authService: AuthService, 
       private usersService: UsersService, 
       private router: Router,
+      private messageService: MessageService,
       private ngxService: NgxUiLoaderService) { }
 
   createLoginForm() {
@@ -50,13 +53,12 @@ export class LoginComponent implements OnInit {
 
   createRegisterForm() {
     return new FormGroup({
-      first_name: new FormControl('', [Validators.required]),
-      last_name: new FormControl('', [Validators.required]),
+      id: new FormControl('', []),
+      name: new FormControl('', [Validators.required]),
       gender: new FormControl('', [Validators.required]),
       correo: new FormControl('', [Validators.required, Validators.pattern(this.emailPattern)]),
       passwordreg: new FormControl('', [Validators.required]),
-      status: new FormControl('', [Validators.required]),
-      id: new FormControl('', [])
+      status: new FormControl('', [Validators.required])
     });
   }
 
@@ -83,23 +85,45 @@ export class LoginComponent implements OnInit {
     this.ngxService.start();
 
     this.usersService.registergorest(this.iUserReg).subscribe(response => {
-      if (response['_meta'].code === 200) {
-
-        console.log(response);
+      console.log(response);
+      //if (response['code'] === 200 || response['code'] === 201) {
+      if (response.code === 200 || response.code === 201) {
         
-        this.iUserReg.user_id = response['result'].id;
+        this.iUserReg.user_id = response.data['id'];
 
         this.usersService.register(this.iUserReg).subscribe(result => {
+
           this.registerForm.reset();
           this.modalRegister = false;
+
+          if (result.IsSuccess) {
+            this.showSuccess('Se ha registrado satisfactoriamente.');
+          } else {
+            //Eliminar el usuario de gorest
+            this.showError('Ha ocurrido un error al registrarse, por favor intente nuevamente.');
+          }
         });
         
+      } else {
+        let messageError: string = 'Ha ocurrido lo siguiente: \n\n';
+        response.data.forEach(item => {
+          messageError =  messageError + ` Campo: ${ item.field }, Mensaje: ${ item.message }`;
+        });
+        this.showError(messageError);
       }
 
       this.ngxService.stop();
     });
 
     
+  }
+
+  showSuccess(message: string) {
+    this.messageService.add({severity:'success', summary: 'Bien hecho', detail: message});
+  }
+
+  showError(message: string) {
+    this.messageService.add({severity:'error', summary: 'Algo no va bien', detail: message});
   }
 
 }

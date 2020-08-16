@@ -33,6 +33,8 @@ import { JwtInterceptor } from "../app/security/jwt.interceptor";
 import { HomeComponent } from './pages/home/home.component';
 
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { NgxSpinnerModule } from "ngx-spinner";
 
 
 @NgModule({
@@ -65,7 +67,9 @@ import { NgxUiLoaderModule } from 'ngx-ui-loader';
     ButtonModule,
     EditorModule,
     VirtualScrollerModule,
-    NgxUiLoaderModule
+    NgxUiLoaderModule,
+    InfiniteScrollModule,
+    NgxSpinnerModule
   ],
   providers: [
     {

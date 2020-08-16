@@ -70,27 +70,15 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label>Nombres</label>
+                    <label>Nombres y Apellidos</label>
                     <input 
                         type="text" 
                         class="form-control" 
-                        formControlName="first_name" 
-                        [(ngModel)]="iUserReg.first_name"
-                        [ngClass]="{ 'is-invalid': first_name.invalid && (first_name.dirty || first_name.touched) }"
-                        placeholder="Ingrese nombres">
+                        formControlName="name" 
+                        [(ngModel)]="iUserReg.name"
+                        [ngClass]="{ 'is-invalid': name.invalid && (name.dirty || name.touched) }"
+                        placeholder="Ingrese nombres y apellidos">
                     </div> 
-            </div>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label>Apellidos</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        formControlName="last_name" 
-                        [(ngModel)]="iUserReg.last_name"
-                        [ngClass]="{ 'is-invalid': last_name.invalid && (last_name.dirty || last_name.touched) }"
-                        placeholder="Ingrese nombres">
-                </div> 
             </div>
             <div class="col-md-12">
                 <div class="form-group">
@@ -100,8 +88,8 @@
                         formControlName="gender" 
                         [ngClass]="{ 'is-invalid': gender.invalid && (gender.dirty || gender.touched) }"
                         [(ngModel)]="iUserReg.gender">
-                        <option value="female">Femenino</option>
-                        <option value="male">Masculino</option>
+                        <option value="Female">Femenino</option>
+                        <option value="Male">Masculino</option>
                     </select>
                 </div> 
             </div>
@@ -137,8 +125,8 @@
                         formControlName="status" 
                         [ngClass]="{ 'is-invalid': status.invalid && (status.dirty || status.touched) }"
                         [(ngModel)]="iUserReg.status">
-                        <option value="active">Activo</option>
-                        <option value="inactive">Inactivo</option>
+                        <option value="Active">Activo</option>
+                        <option value="Inactive">Inactivo</option>
                     </select>
                 </div> 
             </div>
@@ -152,3 +140,4 @@
 </p-dialog>
 
 <ngx-ui-loader></ngx-ui-loader>
+<p-toast></p-toast>

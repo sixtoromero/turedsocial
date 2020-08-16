@@ -6,6 +6,7 @@ import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ResponseModel } from '../models/response.model';
 import { PostsModel } from '../models/posts.model';
+import { ResponseGoRestModel } from '../models/respgorest.model';
 
 //'Contend-Type': 'application/json',
 const httpOptionsgorest = {
@@ -34,8 +35,7 @@ export class UsersService {
         return this._http.post<ResponseModel>(`${this.endPoint}/users/insert`, user, httpOptions);
     }
 
-    registergorest(user: UsersModel): Observable<UsersModel> {
-        return this._http.post<UsersModel>(`${this.endPointgorest}/users?access-token=${environment.token}`, user, httpOptionsgorest);
+    registergorest(user: UsersModel): Observable<ResponseGoRestModel> {
+        return this._http.post<ResponseGoRestModel>(`${this.endPointgorest}/users?access-token=${environment.token}`, user, httpOptionsgorest);
     }
 }
-

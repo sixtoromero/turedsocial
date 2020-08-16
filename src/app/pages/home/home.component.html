@@ -2,30 +2,30 @@
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-            <nav class="navbar navbar-expand-lg navbar-light bg-light">
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-                  <span class="navbar-toggler-icon"></span>
-                </button>
-                <a class="navbar-brand" href="#">Tu Red Social</a>
-              
-                <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-                  <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
-                    <li class="nav-item active">
-                      <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Mis Posts</a>
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link" href="#">Perfil</a>
-                    </li>
-                  </ul>
-                  <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Buscar Post" aria-label="Buscar">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
-                  </form>
-                </div>
-              </nav>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="#">Tu Red Social</a>
+          
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+              <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item active">
+                  <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Mis Posts</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">Perfil</a>
+                </li>
+              </ul>
+              <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Buscar Post" aria-label="Buscar">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Buscar</button>
+              </form>
+            </div>
+          </nav>
       </div>
       <div class="col-md-12">
         <div class="card">
@@ -48,25 +48,41 @@
               </div>
               <div class="col-md-12">
                 <div class="form-group">
-                  <p-editor 
-                    [(ngModel)]="ipost.body" 
-                    [style]="{'height':'320px'}"
+                  <textarea 
+                    class="form-control" 
+                    rows="3"
                     formControlName="body"
-                    [ngClass]="{ 'is-invalid': body.invalid && (body.dirty || body.touched) }">
-                  </p-editor>
+                    [(ngModel)]="ipost.body"
+                    [ngClass]="{ 'is-invalid': body.invalid && (body.dirty || body.touched) }"></textarea>
+                </div>
+              </div>
+              <div class="col-md-12">                
+                <div class="form-group" style="text-align: right;">
+                  <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;" multiple>
+                  <!-- <button type="button" class="btn btn-success" (click)="file.click()">cargar imagen</button> -->
+                  <button 
+                    pButton 
+                    pRipple 
+                    type="button" 
+                    icon="pi pi-image" 
+                    (click)="file.click()"
+                    class="p-button-rounded p-button-secondary">
+                  </button>
+                  <br>
+                  <br>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <img [src]="ipost.url" alt="" width="100%" height="500"  class="img-fluid rounded">
+                    </div>
+                  </div>
+                  <!-- <div class="row">
+                    <div class="col-md-12">
+                      {{ message }}
+                    </div>
+                  </div> -->
                 </div>
               </div>
             </div>
-
-            <!-- <p-editor [(ngModel)]="ipost.body" [style]="{'height':'320px'}">
-              <p-header>
-                  <span class="ql-formats">
-                      <button class="ql-bold" aria-label="Bold"></button>
-                      <button class="ql-italic" aria-label="Italic"></button>
-                      <button class="ql-underline" aria-label="Underline"></button>
-                  </span>
-              </p-header>
-            </p-editor> -->
             <br>
             <div class="row">
               <div class="col-md-12" style="text-align: right;">
@@ -77,46 +93,41 @@
                   label="Publicar" 
                   (click)="register();" 
                   class="p-button-rounded p-button-info" 
-                  [disabled]="!registerForm.valid"></button>
+                  [disabled]="!registerForm.valid"></button>                  
               </div>
+              
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>    
+
+    <div class="row justify-content-center">
+      <div class="col-md-12" style="text-align: center;">
+        <div class="card shadow" *ngFor="let post of liPosts">
+          <div class="card-body">
+            <h5 class="card-title text-left">{{ post.title }}</h5>
+            <div class="col-md-12" style="text-align: justify;">
+              {{ post.body }}
+            </div>
+            <div class="col-md-12" *ngIf="post.isVisible">
+              <img [src]="post.url" alt="" width="100%" height="500"  class="img-fluid rounded">
+            </div>
+            <br>            
+            <div class="card-footer">
+              Reach before 4PM
             </div>
           </div>
         </div>
       </div>
     </div>
-    <br>
-    <div class="row">
-      <div class="col-md-12">
-        <p-virtualScroller [value]="virtualCars" scrollHeight="450px" [itemSize]="100" [rows]="100" 
-                [lazy]="true" (onLazyLoad)="loadCarsLazy($event)">
-            <ng-template let-car pTemplate="item" let-i="index">
-                <div class="car-details">
-                    <div>
-                        <div>
-                            <b>{{car.vin}}</b>
-                            <div>{{car.year}} - {{car.color}}</div> 
-                        </div>
-                    </div>
-                    <button pButton type="button" icon="pi pi-search" (click)="selectCar($event, car)"></button>
-                </div>
-            </ng-template>
-            <ng-template let-car pTemplate="loadingItem">
-                <div class="car-details">
-                    <div>
-                        <div class="car-item-image empty-car-item-image"></div>
-                        <div>
-                            <b class="empty-car-item-text"></b>
-                            <div class="empty-car-item-text"></div> 
-                        </div>
-                    </div>
-                    <div class="empty-car-item-button"></div>
-                </div>
-            </ng-template>
-        </p-virtualScroller>
-      </div>
-    </div>
+
   </div>
+
+
+
 </form>
 
-
 <ngx-ui-loader></ngx-ui-loader>
+<p-toast></p-toast>
