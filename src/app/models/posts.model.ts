@@ -5,5 +5,6 @@ export class PostsModel {
     public title: string;
     public body: string;
     public url: string = '';
+    public created_at: Date;
     public isVisible: boolean = false;
 }

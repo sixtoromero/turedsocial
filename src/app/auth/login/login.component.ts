@@ -75,6 +75,8 @@ export class LoginComponent implements OnInit {
       this.ngxService.stop();
       if (response.IsSuccess) {
         this.router.navigate(['/']);
+      } else {
+        this.showWarning('Usuario o contraseña incorrectos');
       }
     });
     
@@ -124,6 +126,10 @@ export class LoginComponent implements OnInit {
 
   showError(message: string) {
     this.messageService.add({severity:'error', summary: 'Algo no va bien', detail: message});
+  }
+
+  showWarning(message: string) {
+    this.messageService.add({severity:'warning', summary: 'Vaya', detail: message});
   }
 
 }

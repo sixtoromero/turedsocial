@@ -59,7 +59,6 @@
               <div class="col-md-12">                
                 <div class="form-group" style="text-align: right;">
                   <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;" multiple>
-                  <!-- <button type="button" class="btn btn-success" (click)="file.click()">cargar imagen</button> -->
                   <button 
                     pButton 
                     pRipple 
@@ -75,11 +74,6 @@
                       <img [src]="ipost.url" alt="" width="100%" height="500"  class="img-fluid rounded">
                     </div>
                   </div>
-                  <!-- <div class="row">
-                    <div class="col-md-12">
-                      {{ message }}
-                    </div>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -95,34 +89,53 @@
                   class="p-button-rounded p-button-info" 
                   [disabled]="!registerForm.valid"></button>                  
               </div>
-              
-
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>    
-
-    <div class="row justify-content-center">
-      <div class="col-md-12" style="text-align: center;">
-        <div class="card shadow" *ngFor="let post of liPosts">
-          <div class="card-body">
-            <h5 class="card-title text-left">{{ post.title }}</h5>
-            <div class="col-md-12" style="text-align: justify;">
-              {{ post.body }}
-            </div>
-            <div class="col-md-12" *ngIf="post.isVisible">
-              <img [src]="post.url" alt="" width="100%" height="500"  class="img-fluid rounded">
-            </div>
-            <br>            
-            <div class="card-footer">
-              Reach before 4PM
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <div class="row justify-content-center">
+      <div class="col-md-12" style="text-align: center;">
+        <div 
+          class="search-results"
+          infiniteScroll
+          [infiniteScrollDistance]="2"
+          [infiniteScrollThrottle]="50"
+          (scrolled)="onScroll()">
+          
+          <div class="card shadow" *ngFor="let post of liPosts">
+            <div class="card-body">
+              <h5 class="card-title text-left">{{ post.title }}</h5>
+              <div class="col-md-12" style="text-align: justify;">
+                {{ post.body }}
+              </div>
+              <div class="col-md-12" *ngIf="post.isVisible">
+                <img [src]="post.url" alt="" width="100%" height="500"  class="img-fluid rounded">
+              </div>
+              <br>            
+              <div class="card-footer">
+                creado: {{ post.created_at | date }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- sinner -->
+        <div class="row pb-5">
+          <div class="col-md-12 p-5">
+            <ngx-spinner
+            bdOpacity = 0.9
+            bdColor = ""
+            size = "default"
+            color = "#581f87"
+            type = "ball-pulse-sync"
+            [fullScreen] = "false"
+            >
+            </ngx-spinner>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 
 

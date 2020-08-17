@@ -48,7 +48,13 @@ export class PostsService {
         return this._http.post<ResponseGoRestModel>(`${this.endPointgorest}/posts?access-token=${environment.token}`, post, httpOptionsgorest);
     }
 
+    getpostsAll(limit: number): Observable<ResponseModel> {
+        const user_id = localStorage.getItem('user_id');
+        return this._http.get<ResponseModel>(`${this.endPoint}/posts/getPostsPagination?user_id=${user_id}&limit=${limit}`);
+    }
+
     insert(ipost: PostsModel): Observable<ResponseModel> {
+        console.log('GUARDANDO POSTS', ipost);
         return this._http.post<ResponseModel>(`${this.endPoint}/posts/insert`, ipost, httpOptions);
     }
 }

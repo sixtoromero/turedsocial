@@ -9,6 +9,10 @@ import {LazyLoadEvent, SelectItem, MessageService} from 'primeng/api';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { environment } from 'src/environments/environment';
+
+import * as _ from 'lodash';
+import { NgxSpinnerService } from 'ngx-spinner';
+
 //import { debug } from 'console';
 
 @Component({
@@ -37,6 +41,11 @@ export class HomeComponent implements OnInit {
   public progress: number;
   public message: string;
 
+  allpost;
+  notEmptyPost = true;
+  notscrolly = true;
+  limit: number = 0;
+
   get title() { return this.registerForm.get('title'); }
   get body() { return this.registerForm.get('body'); }
 
@@ -46,7 +55,8 @@ export class HomeComponent implements OnInit {
     private ngxService: NgxUiLoaderService,
     private _http: HttpClient,
     private messageService: MessageService,
-    private postsService: PostsService) { }
+    private postsService: PostsService,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit(): void {          
 
@@ -56,45 +66,24 @@ export class HomeComponent implements OnInit {
     // ];
 
     this.registerForm = this.createRegisterForm();
-    this.getPostsByUser();
-
-  }
-
-  getPostsByUser() {
-    this.postsService.getPostByUserID().subscribe(response => {
-      if (response.IsSuccess) {
-        this.result_posts = response.Data;
-        this.getposts();
-      }
-    });
-  }
-
-  getposts() {
-    this.ngxService.start();
-
-    this.postsService.getpostsByUserID().subscribe(response => {
-      //if (response['_meta'].code === 200) {
-      if (response.code === 200) {
-        this.liPosts = response.data;
-        this.liPosts.forEach(post => {
-          let result = this.result_posts.find(i => i.id_posts === post.id.toString())
-          if (result !== null && result !== undefined) {
-            post.url = result.url;
-            post.isVisible = true;
-          }
-        });
-
-        this.postsService.getposts().subscribe(reg => {
-          if (reg.code === 200) {
-            reg.data.forEach(item => {
-              this.liPosts.push(item);
-            });
-          }
-        });
-      }
-      this.ngxService.stop();
-    },error => console.log(error));
+    this.limit = 5;
+    this.getpostsAll();
     
+  }
+
+  getpostsAll() {
+    this.ngxService.start();
+    //this.liPosts = [];
+    this.postsService.getpostsAll(5).subscribe(response => {
+      if (response.IsSuccess) {
+        this.liPosts = response.Data;
+      } else {
+        this.showError('Ha ocurrido un error al consultar los posts');
+      }
+
+      this.ngxService.stop();
+    });
+
   }
 
   register() {
@@ -114,7 +103,7 @@ export class HomeComponent implements OnInit {
             this.ipost = new PostsModel();
             this.registerForm.reset();
           } else {
-            console.log('Mostrar mensaje avisando que no guardó');
+            this.showError('Ha ocurrido un inconveniente al guardar su historia, por favor intente nuevamente.');
           }
         });
       } else {
@@ -129,7 +118,7 @@ export class HomeComponent implements OnInit {
       this.ngxService.stop();
 
       if (response.code === 200 || response.code === 201){
-        this.getposts();
+        this.getpostsAll();
       }
 
     });
@@ -159,19 +148,49 @@ export class HomeComponent implements OnInit {
     this.formData = new FormData()
     this.formData.append('file', fileToUpload, fileToUpload.name);
 
-    //const jsonpost = JSON.stringify(this.ipost);
-    this.ipost.url = `${environment.imgURL}/${fileToUpload.name}`;
+    //const jsonpost = JSON.stringify(this.ipost);    
     
     this._http.post(`${environment.apiURL}/posts/fileupload`, this.formData, { reportProgress: true, observe: 'events'})
       .subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress)
+        if (event.type === HttpEventType.UploadProgress){
           this.progress = Math.round(100 * event.loaded / event.total);
-        else if (event.type === HttpEventType.Response) {
-          this.message = 'Archivo subido exitosamente.';
-          this.onUploadFinished.emit(event.body);          
         }
-        console.log(event);
+        else {
+          if (event.type === HttpEventType.Response) {
+            this.message = 'Archivo subido exitosamente.';
+            this.onUploadFinished.emit(event.body);
+            this.ipost.url = `${environment.imgURL}/${fileToUpload.name}`;
+          }
+        }
+        //console.log(event);
       });
+  }
+
+  onScroll() {
+    
+    this.spinner.show();
+    this.notscrolly = false;
+    this.loadNextPost();
+
+    // if (this.notscrolly && this.notEmptyPost) {
+    //   this.spinner.show();
+    //   this.notscrolly = false;
+    //   this.loadNextPost();
+    // }
+  }
+
+  loadNextPost() {
+    this.limit = this.limit + 5;
+    //this.getpostsAll();
+
+    this.postsService.getpostsAll(this.limit).subscribe(response => {
+      if (response.IsSuccess) {
+        this.liPosts = response.Data;        
+      } else {
+        this.showError('Ha ocurrido un error al consultar los posts');
+      }
+      this.spinner.hide();
+    });
   }
 
   showSuccess(message: string) {
