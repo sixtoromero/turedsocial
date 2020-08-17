@@ -35,13 +35,15 @@ import { HomeComponent } from './pages/home/home.component';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { InfiniteScrollModule } from 'ngx-infinite-scroll';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { CreatepostsComponent } from './pages/createposts/createposts.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    CreatepostsComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,73 @@
+<div class="container">    
+    <div class="row">
+        <div class="col-md-12">
+            <form [formGroup]="registerForm">
+                <div class="card">
+                    <div class="card-header">
+                        ¿Que estás pensando?
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label>Título</label>
+                                    <input 
+                                        type="text" 
+                                        class="form-control" 
+                                        formControlName="title" 
+                                        [ngClass]="{ 'is-invalid': title.invalid && (title.dirty || title.touched) }"
+                                        [(ngModel)]="ipost.title"
+                                        placeholder="Ingrese un título">
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <textarea 
+                                    class="form-control" 
+                                    rows="3"
+                                    formControlName="body"
+                                    [(ngModel)]="ipost.body"
+                                    [ngClass]="{ 'is-invalid': body.invalid && (body.dirty || body.touched) }"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-md-12">                
+                                <div class="form-group" style="text-align: right;">
+                                    <input type="file" #file placeholder="Choose file" (change)="uploadFile(file.files)" style="display:none;" multiple>
+                                    <button 
+                                        pButton 
+                                        pRipple 
+                                        type="button" 
+                                        icon="pi pi-image" 
+                                        (click)="file.click()"
+                                        class="p-button-rounded p-button-secondary">
+                                    </button>
+                                    <br>
+                                    <br>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <img [src]="ipost.url" alt="" width="100%" height="500"  class="img-fluid rounded">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-12" style="text-align: right;">
+                                <button 
+                                    pButton 
+                                    pRipple 
+                                    type="button" 
+                                    label="Publicar" 
+                                    (click)="register();" 
+                                    class="p-button-rounded p-button-info" 
+                                    [disabled]="!registerForm.valid">
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+            </form>
+        </div>
+    </div>
+</div>
